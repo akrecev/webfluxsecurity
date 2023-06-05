@@ -2,7 +2,7 @@ package com.example.webfluxsecurity.security;
 
 import com.example.webfluxsecurity.entity.UserEntity;
 import com.example.webfluxsecurity.exception.UnauthorisedException;
-import com.example.webfluxsecurity.repository.UserRepository;
+import com.example.webfluxsecurity.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.core.Authentication;
@@ -13,13 +13,13 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class AuthenticationManager implements ReactiveAuthenticationManager {
 
-    private final UserRepository userRepository;
+    private final UserService userService;
 
     @Override
     public Mono<Authentication> authenticate(Authentication authentication) {
         CustomPrincipal principal = (CustomPrincipal) authentication.getPrincipal();
 
-        return userRepository.findById(principal.getId())
+        return userService.getUserById(principal.getId())
                 .filter(UserEntity::isEnabled)
                 .switchIfEmpty(Mono.error(new UnauthorisedException("User disabled")))
                 .map(user -> authentication);
