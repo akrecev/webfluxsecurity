@@ -1,7 +1,7 @@
 package com.example.webfluxsecurity.security;
 
 import com.example.webfluxsecurity.entity.UserEntity;
-import com.example.webfluxsecurity.exception.UnauthorisedException;
+import com.example.webfluxsecurity.exception.UnauthorizedException;
 import com.example.webfluxsecurity.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
@@ -21,7 +21,7 @@ public class AuthenticationManager implements ReactiveAuthenticationManager {
 
         return userService.getUserById(principal.getId())
                 .filter(UserEntity::isEnabled)
-                .switchIfEmpty(Mono.error(new UnauthorisedException("User disabled")))
+                .switchIfEmpty(Mono.error(new UnauthorizedException("User disabled")))
                 .map(user -> authentication);
     }
 }

@@ -1,6 +1,6 @@
 package com.example.webfluxsecurity.security;
 
-import com.example.webfluxsecurity.exception.UnauthorisedException;
+import com.example.webfluxsecurity.exception.UnauthorizedException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import reactor.core.publisher.Mono;
@@ -18,7 +18,7 @@ public class JwtHandler {
 
     public Mono<VerificationResult> check(String accessToken) {
         return Mono.just(verify(accessToken))
-                .onErrorResume(e -> Mono.error(new UnauthorisedException(e.getMessage())));
+                .onErrorResume(e -> Mono.error(new UnauthorizedException(e.getMessage())));
     }
 
     private VerificationResult verify(String token) {
